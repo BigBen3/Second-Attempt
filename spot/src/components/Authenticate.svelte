@@ -1,7 +1,6 @@
 <script>
-	import { sendPasswordResetEmail } from 'firebase/auth';
-	// @ts-ignore
 	import { authHandlers } from '../store/store';
+
 	let email = '';
 	let password = '';
 	let confirmPass = '';
@@ -9,18 +8,16 @@
 	let register = false;
 	let authenticating = false;
 
-	//check if you are checking if the pass and confirm pass works
-	const handleAuthenticate = async () => {
+	async function handleAuthenticate() {
 		if (authenticating) {
 			return;
 		}
-
 		if (!email || !password || (register && !confirmPass)) {
 			error = true;
 			return;
 		}
-
 		authenticating = true;
+
 		try {
 			if (!register) {
 				await authHandlers.login(email, password);
@@ -28,27 +25,24 @@
 				await authHandlers.signup(email, password);
 			}
 		} catch (err) {
-			console.log('auth  error', err);
+			console.log('There was an auth error', err);
 			error = true;
 			authenticating = false;
 		}
-	};
+	}
 
-	const handleRegister = () => {
+	function handleRegister() {
 		register = !register;
-	};
+	}
 </script>
 
-<div class="auth-container">
+<div class="authContainer">
 	<form>
-		<!--if reigester true make it say register else make it say login -->
 		<h1>{register ? 'Register' : 'Login'}</h1>
 		{#if error}
 			<p class="error">The information you have entered is not correct</p>
 		{/if}
-
 		<label>
-			<!--if email exist then it is above else it will be center-->
 			<p class={email ? ' above' : ' center'}>Email</p>
 			<input bind:value={email} type="email" placeholder="Email" />
 		</label>
@@ -62,9 +56,10 @@
 				<input bind:value={confirmPass} type="password" placeholder="Confirm Password" />
 			</label>
 		{/if}
-		<button on:click={handleAuthenticate} type="button" class="submit">
+
+		<button on:click={handleAuthenticate} type="button" class="submitBtn">
 			{#if authenticating}
-				<i class="fa-solid fa-spinner spin" />
+				<i class="fa-solid fa-spinner loadingSpinner" />
 			{:else}
 				Submit
 			{/if}
@@ -80,7 +75,6 @@
 		{:else}
 			<div>
 				<p>Don't have an account?</p>
-				<!--since it is not a button it needs an on keydown -->
 				<p on:click={handleRegister} on:keydown={() => {}}>Register</p>
 			</div>
 		{/if}
@@ -88,7 +82,7 @@
 </div>
 
 <style>
-	.auth-container {
+	.authContainer {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -96,42 +90,51 @@
 		flex: 1;
 		padding: 24px;
 	}
+
 	form {
 		display: flex;
 		flex-direction: column;
 		gap: 14px;
 	}
+
 	form,
 	.options {
 		width: 400px;
 		max-width: 100%;
 		margin: 0 auto;
 	}
+
 	form input {
 		width: 100%;
 	}
+
 	h1 {
 		text-align: center;
 		font-size: 3rem;
 	}
+
 	form label {
 		position: relative;
 		border: 1px solid navy;
 		border-radius: 5px;
 	}
+
 	form input {
 		border: none;
 		background: transparent;
 		color: white;
 		padding: 14px;
 	}
+
 	form input:focus {
 		border: none;
 		outline: none;
 	}
+
 	form label:focus-within {
 		border-color: blue;
 	}
+
 	form button {
 		background: navy;
 		color: white;
@@ -142,12 +145,12 @@
 		font-size: 1rem;
 		display: grid;
 		place-items: center;
-		display: grid;
-		place-items: center;
 	}
+
 	form button:hover {
 		background: blue;
 	}
+
 	.above,
 	.center {
 		position: absolute;
@@ -158,6 +161,7 @@
 		padding: 0 6px;
 		font-size: 0.8rem;
 	}
+
 	.above {
 		top: 0;
 		left: 24px;
@@ -165,12 +169,14 @@
 		border: 1px solid blue;
 		font-size: 0.7rem;
 	}
+
 	.center {
 		top: 50%;
 		left: 6px;
 		border: 1px solid transparent;
 		opacity: 0;
 	}
+
 	.error {
 		color: coral;
 		font-size: 0.9rem;
@@ -185,6 +191,7 @@
 		flex-direction: column;
 		gap: 4px;
 	}
+
 	.options > p {
 		position: relative;
 		text-align: center;
@@ -192,6 +199,7 @@
 		margin: 0 auto;
 		padding: 0 8px;
 	}
+
 	.options > p::after,
 	.options > p::before {
 		position: absolute;
@@ -202,9 +210,11 @@
 		height: 1.5px;
 		background: white;
 	}
+
 	.options > p::after {
 		right: 100%;
 	}
+
 	.options > p::before {
 		left: 100%;
 	}
@@ -221,8 +231,8 @@
 		cursor: pointer;
 	}
 
-	.spin {
-		animation: spin 2s infinite;
+	.loadingSpinner {
+		animation: spin 1s linear infinite;
 	}
 
 	@keyframes spin {

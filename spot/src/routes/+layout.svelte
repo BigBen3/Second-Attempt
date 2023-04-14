@@ -6,7 +6,7 @@
 	import { auth, db } from '../lib/firebase/firebase';
 	import { getDoc, doc, setDoc } from 'firebase/firestore';
 	import { authStore } from '../store/store';
-	const nonAuthRoutes = ['/', 'product'];
+	const nonAuthRoutes = ['/', 'api/auth/callback/spotify', 'dashboard'];
 	let dataToSetToStore;
 	/* 
             how it is being done: 

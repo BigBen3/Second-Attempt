@@ -13,9 +13,9 @@
 			return;
 		}
 		if (!email || !password || (register && !confirmPass)) {
-			error = true;
-			return;
-		}
+            error = true;
+            return;
+        }
 		authenticating = true;
 
 		try {

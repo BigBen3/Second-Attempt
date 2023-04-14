@@ -3,10 +3,11 @@ import { redirect} from '@sveltejs/kit';
 
 export const GET = async ({ url }) => {
 	const code = url.searchParams.get('code');
-	const authStr = `\${clientId}:\${clientSecret}`;
-	const b64AuthStr = Buffer.from(authStr).toString('base64');
+	const authKey = Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString(
+		'base64'
+	);
 	const headers = new Headers();
-	headers.append('Authorization', `Basic ${b64AuthStr}`);
+	headers.append('Authorization', `Basic ${authKey}`);
 	headers.append('Content-Type', 'application/x-www-form-urlencoded');
 	headers.append('Accept', 'application/json');
 

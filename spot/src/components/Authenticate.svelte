@@ -43,16 +43,13 @@
 			<p class="error">The information you have entered is not correct</p>
 		{/if}
 		<label>
-			<p class={email ? ' above' : ' center'}>Email</p>
 			<input bind:value={email} type="email" placeholder="Email" />
 		</label>
 		<label>
-			<p class={password ? ' above' : ' center'}>Password</p>
 			<input bind:value={password} type="password" placeholder="Password" />
 		</label>
 		{#if register}
 			<label>
-				<p class={confirmPass ? ' above' : ' center'}>Confirm Password</p>
 				<input bind:value={confirmPass} type="password" placeholder="Confirm Password" />
 			</label>
 		{/if}
@@ -149,32 +146,6 @@
 
 	form button:hover {
 		background: blue;
-	}
-
-	.above,
-	.center {
-		position: absolute;
-		transform: translateY(-50%);
-		pointer-events: none;
-		color: white;
-		border-radius: 4px;
-		padding: 0 6px;
-		font-size: 0.8rem;
-	}
-
-	.above {
-		top: 0;
-		left: 24px;
-		background: navy;
-		border: 1px solid blue;
-		font-size: 0.7rem;
-	}
-
-	.center {
-		top: 50%;
-		left: 6px;
-		border: 1px solid transparent;
-		opacity: 0;
 	}
 
 	.error {

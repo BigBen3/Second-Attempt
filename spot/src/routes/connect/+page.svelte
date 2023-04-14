@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { authHandlers } from  '../store/store';
+    //import { authHandlers } from  '../store/store';
     export let data: PageData;
 </script>
 
@@ -15,6 +15,6 @@
 			Get started
 		</a>
 
-
-        <button on:click={authHandlers.logout}>
-            <p>Logout</p></button>
+<!-- <button on:click={authHandlers.logout}>
+            <p>Logout</p></button>-->
+       

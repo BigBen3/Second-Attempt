@@ -5,11 +5,11 @@
 export const load = async () => {
 
 
-	
 
 	const spotifyAuthUrl = new URL(`https://accounts.spotify.com/authorize?`);
 	
 	const state = crypto.randomUUID();
+
 	spotifyAuthUrl.searchParams.append('response_type', 'code');
 	spotifyAuthUrl.searchParams.append('client_id', import.meta.env.VITE_SPOTIFY_CLIENT_ID);
 	spotifyAuthUrl.searchParams.append(
@@ -21,5 +21,7 @@ export const load = async () => {
 		'http://localhost:5173/api/auth/callback/spotify'
 	);
 	spotifyAuthUrl.searchParams.append('state', state);
-	return {  spotifyAuthUrl: spotifyAuthUrl.toString() };
+
+
+	return { spotifyAuthUrl: spotifyAuthUrl.toString() };
 };

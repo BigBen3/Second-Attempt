@@ -51,7 +51,7 @@
 			// if the user is logged in and it is the root url sent them do the dashboard.
 			//if the user has some value that is not null it is considered logged in or in other way it is consired true.
 			if (user && currentPath === '/') {
-				window.location.href = '/dashboard';
+				window.location.href = '/connect';
 				return;
 			}
 

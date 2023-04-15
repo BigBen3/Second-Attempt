@@ -1,6 +1,7 @@
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
 import { auth, db } from '$lib/firebase/firebase';
 import { redirect} from '@sveltejs/kit';
+import { getAuth } from 'firebase/auth';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 
@@ -29,29 +30,24 @@ export const GET = async ({ url }) => {
 	if (!result.ok) {
 		throw redirect(302, '/?error=A problemo');
 	}
-	
 	const data = await result.json();
 	const accessToken = data.access_token;
 	const requestToken = data.refresh_token;
-	auth.onAuthStateChanged(async (currentUser) => {
-		if (currentUser) {
-		  const userRef = doc(db, 'users', currentUser.uid);
-		  const dataToStore = {
-			accessToken: accessToken, // Add the access token to the document
-			refreshToken: requestToken // Add the refresh token to the document
-		  };
-		  await setDoc(userRef, dataToStore, { merge: true });
-		  console.log("access token " + accessToken);
-		  console.log("refresh token " + requestToken)
-		  throw redirect(302, "/dashboard");
-		} else {
-		  throw new Error('No user is currently logged in');
-		}
-	  });
 
-
-	throw redirect(302, "/dashboard")
-	
+	const currentUser = auth.currentUser;
+	if (currentUser) {
+		const userRef = doc(db, 'users', currentUser.uid);
+		const dataToStore = {
+			accessToken: accessToken,
+			refreshToken: requestToken
+		};
+		await setDoc(userRef, dataToStore, { merge: true });
+		console.log("access token " + accessToken);
+		console.log("refresh token " + requestToken);
+		throw redirect(302, "/dashboard");
+	} else {
+		throw new Error('No user is currently logged in');
+	}
 };
 export const POST = async (refreshToken: string, clientId: string, clientSecret: string) => {
 	const authKey = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');

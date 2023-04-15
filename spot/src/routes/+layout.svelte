@@ -95,8 +95,7 @@
 				const userRef = doc(db, 'users', user.uid);
 				//assings the data to a js object
 				dataToSetToStore = {
-					email: user.email,
-					todos: []
+					email: user.email
 				};
 				//merge that js object with the data in the database
 				//the set doc creates the doc based off the reference

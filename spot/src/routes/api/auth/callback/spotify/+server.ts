@@ -48,13 +48,6 @@ export const GET = async ({ url }) => {
 		  throw new Error('No user is currently logged in');
 		}
 	  });
-	
-	
-	const accessToken = data.access_token;
-	const requestToken = data.refresh_token;
-	console.log("it is " + result.status);
-	console.log("access token " + accessToken);
-	console.log("refresh token " + requestToken)
 
 
 	throw redirect(302, "/dashboard")

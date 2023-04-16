@@ -1,4 +1,5 @@
 <script>
+	import { auth } from '$lib/firebase/firebase';
 	import { authHandlers } from '../store/store';
 
 	let email = '';
@@ -13,9 +14,11 @@
 			return;
 		}
 		if (!email || !password || (register && !confirmPass)) {
-            error = true;
-            return;
-        }
+			error = true;
+			return;
+		}
+		// @ts-ignore
+		await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 		authenticating = true;
 
 		try {

@@ -33,21 +33,27 @@ export const GET = async ({ url }) => {
 	const data = await result.json();
 	const accessToken = data.access_token;
 	const requestToken = data.refresh_token;
-
-	const currentUser = auth.currentUser;
-	if (currentUser) {
-		const userRef = doc(db, 'users', currentUser.uid);
+	const user = getAuth().currentUser;
+	console.log("access token " + accessToken);
+	console.log("refresh token " + requestToken);
+	if (user) {
+		const userRef = doc(db, 'users', user.uid);
 		const dataToStore = {
 			accessToken: accessToken,
 			refreshToken: requestToken
 		};
-		await setDoc(userRef, dataToStore, { merge: true });
-		console.log("access token " + accessToken);
-		console.log("refresh token " + requestToken);
-		throw redirect(302, "/dashboard");
-	} else {
-		throw new Error('No user is currently logged in');
+
+		try {
+			await setDoc(userRef, dataToStore, { merge: true });
+			
+			
+		} catch (error) {
+			console.error("Error storing user data", error);
+			throw new Error('Error storing user data');
+		}
 	}
+		throw redirect(302, "/dashboard");
+	
 };
 export const POST = async (refreshToken: string, clientId: string, clientSecret: string) => {
 	const authKey = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');

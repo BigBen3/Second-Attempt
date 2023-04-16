@@ -45,6 +45,7 @@ export const GET = async ({ url }) => {
 
 		try {
 			await setDoc(userRef, dataToStore, { merge: true });
+			console.log("we did it I think")
 			
 			
 		} catch (error) {
@@ -52,6 +53,7 @@ export const GET = async ({ url }) => {
 			throw new Error('Error storing user data');
 		}
 	}
+
 		throw redirect(302, "/dashboard");
 	
 };

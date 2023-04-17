@@ -4,8 +4,12 @@
 //the server ts gets the 
 export const load = async () => {
 
+	const idToken = await loadFirebaseIdToken();
 
-
+	const cookieHeader = `Authorization=Bearer ${idToken}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${60 * 60 * 24}`;
+	const headers = {
+	  'Set-Cookie': cookieHeader,
+	};
 	const spotifyAuthUrl = new URL(`https://accounts.spotify.com/authorize?`);
 	
 	const state = crypto.randomUUID();
@@ -23,5 +27,9 @@ export const load = async () => {
 	spotifyAuthUrl.searchParams.append('state', state);
 
 
-	return { spotifyAuthUrl: spotifyAuthUrl.toString() };
+	return {headers,  spotifyAuthUrl: spotifyAuthUrl.toString() };
 };
+function loadFirebaseIdToken() {
+	throw new Error("Function not implemented.");
+}
+

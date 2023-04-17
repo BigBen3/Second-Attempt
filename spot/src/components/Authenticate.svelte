@@ -26,8 +26,6 @@
 			} else {
 				await authHandlers.signup(email, password);
 			}
-			// @ts-ignore
-			await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 		} catch (err) {
 			console.log('There was an auth error', err);
 			error = true;

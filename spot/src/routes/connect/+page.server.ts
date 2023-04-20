@@ -1,7 +1,7 @@
-import { parse } from 'cookie';
+import * as cookie from 'cookie';
 
 export const load = async ({ headers }) => {
-  const cookies = parse(headers.cookie || '');
+  const cookies = cookie.parse(headers.cookie || '');
   const userUID = cookies.userUID;
 
   const spotifyAuthUrl = new URL(`https://accounts.spotify.com/authorize?`);

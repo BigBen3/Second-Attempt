@@ -2,8 +2,8 @@ import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
 import { auth, db } from '$lib/firebase/firebase';
 import { redirect} from '@sveltejs/kit';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-
-export const GET = async ({ headers: requestHeaders, url }) => {
+import { parse } from '@sveltejs/kit/node_modules/cookie';
+export const GET = async ({ Headers: requestHeaders, url }) => {
   const cookies = parse(requestHeaders.cookie || '');
   const userUID = cookies.userUID;
   const code = url.searchParams.get('code');

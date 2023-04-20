@@ -1,62 +1,60 @@
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
 import { auth, db } from '$lib/firebase/firebase';
 import { redirect} from '@sveltejs/kit';
-import { getAuth } from 'firebase/auth';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 
-export const GET = async ({ url }) => {
+export const GET = async ({ headers, url }) => {
+	const cookies = parse(headers.cookie || '');
+	const userUID = cookies.userUID;
 	const code = url.searchParams.get('code');
 	const authKey = Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString(
-		'base64'
+	  'base64'
 	);
 	const headers = new Headers();
 	headers.append('Authorization', `Basic ${authKey}`);
 	headers.append('Content-Type', 'application/x-www-form-urlencoded');
 	headers.append('Accept', 'application/json');
-
+  
 	const spotifyURL = new URL('https://accounts.spotify.com/api/token');
 	spotifyURL.searchParams.append('code', code as string);
 	spotifyURL.searchParams.append('redirect_uri', 'http://localhost:5173/api/auth/callback/spotify');
 	spotifyURL.searchParams.append('grant_type', 'authorization_code');
 	spotifyURL.searchParams.append('client_id', SPOTIFY_CLIENT_ID);
- 
+  
 	console.log(spotifyURL.toString());
-
+  
 	const result = await fetch(spotifyURL, {
-		method: 'POST',
-		headers
+	  method: 'POST',
+	  headers
 	});
 	if (!result.ok) {
-		throw redirect(302, '/?error=A problemo');
+	  throw redirect(302, '/?error=A problemo');
 	}
 	const data = await result.json();
 	const accessToken = data.access_token;
 	const requestToken = data.refresh_token;
-	const user = getAuth().currentUser;
+  
 	console.log("access token " + accessToken);
 	console.log("refresh token " + requestToken);
-	if (user) {
-		const userRef = doc(db, 'users', user.uid);
-		const dataToStore = {
-			accessToken: accessToken,
-			refreshToken: requestToken
-		};
-
-		try {
-			await setDoc(userRef, dataToStore, { merge: true });
-			console.log("we did it I think")
-			
-			
-		} catch (error) {
-			console.error("Error storing user data", error);
-			throw new Error('Error storing user data');
-		}
+  
+	const userRef = doc(db, 'users', userUID);
+	const dataToStore = {
+	  accessToken: accessToken,
+	  refreshToken: requestToken
+	};
+  
+	try {
+	  await setDoc(userRef, dataToStore, { merge: true });
+	  console.log("Data stored successfully");
+	} catch (error) {
+	  console.error("Error storing user data", error);
+	  throw new Error('Error storing user data');
 	}
-
-		throw redirect(302, "/dashboard");
-	
-};
+  
+	throw redirect(302, "/dashboard");
+  };
+  
 export const POST = async (refreshToken: string, clientId: string, clientSecret: string) => {
 	const authKey = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
   

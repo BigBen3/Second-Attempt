@@ -2,9 +2,10 @@ import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
 import { auth, db } from '$lib/firebase/firebase';
 import { redirect} from '@sveltejs/kit';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { parse } from '@sveltejs/kit/node_modules/cookie';
-export const GET = async ({ Headers: requestHeaders, url }) => {
-  const cookies = parse(requestHeaders.cookie || '');
+import { parse } from 'cookie';
+import type { IncomingMessage } from 'http';
+export const GET = async ({ request, url }) => {
+	const cookies = parse((request as unknown as IncomingMessage).headers.cookie || '');
   const userUID = cookies.userUID;
   const code = url.searchParams.get('code');
   const authKey = Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString(

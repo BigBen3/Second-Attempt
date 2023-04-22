@@ -20,7 +20,6 @@ export async function load({ url }) {
   spotifyURL.searchParams.append('grant_type', 'authorization_code');
   spotifyURL.searchParams.append('client_id', SPOTIFY_CLIENT_ID);
 
-  console.log(spotifyURL.toString());
 
   const result = await fetch(spotifyURL, {
     method: 'POST',

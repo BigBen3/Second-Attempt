@@ -1,12 +1,8 @@
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
-import { auth, db } from '$lib/firebase/firebase';
 import { redirect} from '@sveltejs/kit';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { parse } from 'cookie';
-import type { IncomingMessage } from 'http';
-export const GET = async ({ request, url }) => {
-	const cookies = parse((request as unknown as IncomingMessage).headers.cookie || '');
-  const userUID = cookies.userUID;
+export const GET = async ({  url }) => {
+
+
   const code = url.searchParams.get('code');
   const authKey = Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString(
     'base64'
@@ -38,14 +34,14 @@ export const GET = async ({ request, url }) => {
   console.log("access token " + accessToken);
   console.log("refresh token " + requestToken);
 
-  const userRef = doc(db, 'users', userUID);
+
   const dataToStore = {
     accessToken: accessToken,
     refreshToken: requestToken
   };
 
   try {
-    await setDoc(userRef, dataToStore, { merge: true });
+    //await setDoc(userRef, dataToStore, { merge: true });
     console.log("Data stored successfully");
   } catch (error) {
     console.error("Error storing user data", error);

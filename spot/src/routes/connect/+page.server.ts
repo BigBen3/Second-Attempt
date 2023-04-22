@@ -1,13 +1,5 @@
-import { setCookie } from '@sveltejs/kit/node';
 //maybe load this to the public load and get the cookie there
-export const load = async ({ context }) => {
-  setCookie(context, 'userUID', '12345', {
-    path: '/',
-    maxAge: 60 * 60 * 24 * 7, // 1 week
-    sameSite: 'lax',
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-  });
+export const load = async () => {
 
 
   const spotifyAuthUrl = new URL(`https://accounts.spotify.com/authorize?`);

@@ -1,6 +1,6 @@
 // /api/auth/callback/spotify/+page.server.js
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 /** @type {import('$types').PageServerLoad} */
 export async function load({ url }) {

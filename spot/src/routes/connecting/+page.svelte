@@ -2,8 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { db } from '$lib/firebase/firebase';
 	import { doc, setDoc } from 'firebase/firestore';
+	import { authStore } from '../../store/store.js';
 	// @ts-ignore
-	import { authStore } from '../store/store';
 
 	// data should contain access_token, token_type etc...
 	export let data;

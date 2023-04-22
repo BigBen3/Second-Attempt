@@ -13,7 +13,7 @@ export const load = async () => {
   );
   spotifyAuthUrl.searchParams.append(
     'redirect_uri',
-    'http://localhost:5173/api/auth/callback/spotify'
+    'http://localhost:5173/connecting'
   );
   spotifyAuthUrl.searchParams.append('state', state);
 

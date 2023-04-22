@@ -16,7 +16,7 @@
 	async function finishAuth(user: any) {
 		if (user) {
 			const userRef = doc(db, 'users', user.uid);
-			await setDoc(userRef, data.data, { merge: true });
+			await setDoc(userRef, data.tokens, { merge: true });
 			// you can now save the data in the database
 			// then you can redirect the user to the page "dashboard"
 			goto('/dashboard');

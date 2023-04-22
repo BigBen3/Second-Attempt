@@ -29,12 +29,12 @@ export async function load({ url }) {
   if (!result.ok) {
     throw redirect(302, '/?error=A problemo');
   }
-  const tokens = await result.json();
-  const accessToken = tokens.access_token;
-  const requestToken = tokens.refresh_token;
+  const data = await result.json();
+  const accessToken = data.access_token;
+  const requestToken = data.refresh_token;
   const dataToStore = {
     accessToken: accessToken,
     refreshToken: requestToken
   };
-  return {data: dataToStore};
+  return {tokens: dataToStore};
 }

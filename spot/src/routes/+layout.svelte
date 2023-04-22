@@ -5,9 +5,8 @@
 	import { auth, db } from '../lib/firebase/firebase';
 	import { getDoc, doc, setDoc } from 'firebase/firestore';
 	import { authStore } from '../store/store';
-	import { serialize, parse } from 'cookie';
 
-	const nonAuthRoutes = ['/', 'api/auth/callback/spotify', 'dashboard'];
+	const nonAuthRoutes = ['/', 'connecting', 'connect', 'dashboard'];
 
 	let dataToSetToStore;
 
@@ -27,28 +26,8 @@
 			}
 
 			if (!user) {
-				// Clear the 'userUID' cookie when the user logs out
-				const uidCookie = serialize('userUID', '', {
-					maxAge: -1,
-					httpOnly: true,
-					secure: process.env.NODE_ENV === 'production',
-					path: '/',
-					sameSite: 'strict'
-				});
-				document.cookie = uidCookie;
 				return;
 			}
-
-			// Set the user's Firebase UID in a cookie
-			const userUID = user.uid;
-			const uidCookie = serialize('userUID', userUID, {
-				maxAge: 60 * 60 * 24 * 7, // 1 week
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
-				path: '/',
-				sameSite: 'strict'
-			});
-			document.cookie = uidCookie;
 
 			const docRef = doc(db, 'users', user.uid);
 			const docSnap = await getDoc(docRef);
@@ -64,9 +43,9 @@
 
 			authStore.update((store) => ({
 				...store,
-				isLoggedIn: true,
-				userData: dataToSetToStore,
-				isLoading: false
+				user,
+				data: dataToSetToStore,
+				loading: false
 			}));
 		});
 

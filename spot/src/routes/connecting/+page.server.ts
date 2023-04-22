@@ -16,7 +16,7 @@ export async function load({ url }) {
 
   const spotifyURL = new URL('https://accounts.spotify.com/api/token');
   spotifyURL.searchParams.append('code', code as string);
-  spotifyURL.searchParams.append('redirect_uri', 'http://localhost:5173/api/auth/callback/spotify');
+  spotifyURL.searchParams.append('redirect_uri', 'http://localhost:5173/connecting');
   spotifyURL.searchParams.append('grant_type', 'authorization_code');
   spotifyURL.searchParams.append('client_id', SPOTIFY_CLIENT_ID);
 

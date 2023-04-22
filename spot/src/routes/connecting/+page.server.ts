@@ -1,27 +1,40 @@
 // /api/auth/callback/spotify/+page.server.js
-import { SPOTIFY_CLIENT_ID, SPOTIFY_SECRET } from '$env/static/private';
-import { error } from '@sveltejs/kit';
+import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '$env/static/private';
+import { error, redirect } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
-export async function GET({ url }) {
+/** @type {import('$types').PageServerLoad} */
+export async function load({ url }) {
+
   const code = url.searchParams.get('code');
-  const state = url.searchParams.get('state');
+  const authKey = Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString(
+    'base64'
+  );
+  const headers = new Headers();
+  headers.append('Authorization', `Basic ${authKey}`);
+  headers.append('Content-Type', 'application/x-www-form-urlencoded');
+  headers.append('Accept', 'application/json');
 
-  const res = await fetch('https://accounts.spotify.com/api/token', {
+  const spotifyURL = new URL('https://accounts.spotify.com/api/token');
+  spotifyURL.searchParams.append('code', code as string);
+  spotifyURL.searchParams.append('redirect_uri', 'http://localhost:5173/api/auth/callback/spotify');
+  spotifyURL.searchParams.append('grant_type', 'authorization_code');
+  spotifyURL.searchParams.append('client_id', SPOTIFY_CLIENT_ID);
+
+  console.log(spotifyURL.toString());
+
+  const result = await fetch(spotifyURL, {
     method: 'POST',
-    body: JSON.stringify({
-      code: code,
-      redirect_uri: 'https://yourdomain.com/api/auth/callback/spotify',
-      grant_type: 'authorization_code'
-    }),
-    headers: {
-        'Authorization': 'Basic ' + (new Buffer.fromn(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_SECRET).toString('base64'))
-      },
+    headers
   });
-  
-  if (res.ok) {
-    return await res.json();
-  } else {
-    throw error(500, 'Internal error');
+  if (!result.ok) {
+    throw redirect(302, '/?error=A problemo');
   }
+  const tokens = await result.json();
+  const accessToken = tokens.access_token;
+  const requestToken = tokens.refresh_token;
+  const dataToStore = {
+    accessToken: accessToken,
+    refreshToken: requestToken
+  };
+  return {data: dataToStore};
 }

@@ -9,7 +9,7 @@ export const load = async () => {
   spotifyAuthUrl.searchParams.append('client_id', import.meta.env.VITE_SPOTIFY_CLIENT_ID);
   spotifyAuthUrl.searchParams.append(
     'scope',
-    'playlist-read-private playlist-read-collaborative'
+    'playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-read-email user-read-private'
   );
   spotifyAuthUrl.searchParams.append(
     'redirect_uri',

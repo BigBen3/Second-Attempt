@@ -7,7 +7,8 @@
 
 	// data should contain access_token, token_type etc...
 	export let data;
-
+	//$: reactive statement everytime something changes it calls the function again
+	// $ in the authstore is a reactive element updates everytime a user changes and then the reactive statement kicks in and calls the function again
 	$: finishAuth($authStore.user);
 
 	/**

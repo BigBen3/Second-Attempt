@@ -1,9 +1,18 @@
 <script>
 	import { authHandlers } from '../../store/store';
+	import { authStore } from '../../store/store.js';
+
+	//get logged in user
+	//then get there access token
+	//then get send post request
 </script>
 
 <h1>Your songs</h1>
 <div class="mainContainer">
+	<div class="data">
+		<!---->
+	</div>
+
 	<div class="headerContainer">
 		<div class="headerBtns">
 			<button on:click={authHandlers.logout}>

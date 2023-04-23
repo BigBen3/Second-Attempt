@@ -1,6 +1,9 @@
-<script>
+<script lang="ts">
 	import { authHandlers } from '../../store/store';
 	import { authStore } from '../../store/store.js';
+	const getUserId = async () => {
+		await fetch('https://api.spotify.com/v1/me');
+	};
 
 	//get logged in user
 	//then get there access token
